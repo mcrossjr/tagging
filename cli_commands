@@ -1,0 +1,77 @@
+1. First, list your EC2 instances and their tags
+bash
+
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,Tags]' --output json
+2. Check AWS Backup plans that might use tags
+bash
+
+# List all backup plans
+aws backup list-backup-plans
+
+# Get details of each backup plan (replace PLAN-ID with actual ID)
+aws backup get-backup-plan --backup-plan-id PLAN-ID
+
+# Check backup selection resources (which might use tags)
+aws backup list-backup-selections --backup-plan-id PLAN-ID
+aws backup get-backup-selection --backup-plan-id PLAN-ID --selection-id SELECTION-ID
+3. Review IAM policies that reference tags
+bash
+
+# List all policies
+aws iam list-policies
+
+# Get detailed policy document (look for Condition elements with tags)
+aws iam get-policy-version --policy-arn POLICY-ARN --version-id VERSION-ID
+4. Check EventBridge (CloudWatch Events) rules
+bash
+
+# List all rules
+aws events list-rules
+
+# Get rule details to see if tags are used in the pattern
+aws events describe-rule --name RULE-NAME
+5. Examine Systems Manager Tag-based operations
+bash
+
+# List all SSM documents
+aws ssm list-documents
+
+# Get document details
+aws ssm get-document --name DOCUMENT-NAME
+6. Check Lambda functions that might filter by tags
+bash
+
+# List Lambda functions
+aws lambda list-functions
+
+# Get function code location to review it
+aws lambda get-function --function-name FUNCTION-NAME
+7. Check cost allocation tags
+bash
+
+# List cost allocation tags
+aws ce list-cost-allocation-tags
+8. Check Data Lifecycle Manager policies (for automated snapshots)
+bash
+
+# List DLM policies
+aws dlm get-lifecycle-policies
+
+# Get policy details
+aws dlm get-lifecycle-policy --policy-id POLICY-ID
+9. Check Auto Scaling Groups that might use tags for scaling
+bash
+
+# List Auto Scaling Groups
+aws autoscaling describe-auto-scaling-groups
+
+# Get tags on Auto Scaling Groups
+aws autoscaling describe-tags
+10. Resource Groups that use tags
+bash
+
+# List resource groups
+aws resource-groups list-groups
+
+# Get details of each group
+aws resource-groups get-group --group-name GROUP-NAME
